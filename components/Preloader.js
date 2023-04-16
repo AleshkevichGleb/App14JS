@@ -14,8 +14,9 @@ class Preloader {
             setTimeout(() => {
                 if(!this.preloader.classList.contains('done')) {
                     this.preloader.classList.add('done');
+                    this.preloader.remove();
                 }
-            },2000)
+            },1300)
         })
     }
 }

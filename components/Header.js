@@ -1,9 +1,11 @@
+import { headerElements as HeaderElements} from "./HeaderElements.js";
+
 class Header {
     create() {
         let header = document.createElement('header');
         header.className = 'header';
         this.element = header;
-        this.element.innerHTML = 'sdfsdfsdf';
+        this.element.append(HeaderElements);
         return this.element;
     }
 

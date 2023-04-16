@@ -19,6 +19,7 @@ html, body{
     font-family: 'Roboto';
     font-size: 18px;
     font-weight: 400;
+    background-image: url('../images/background.png');
 }
 
 h1 {
