@@ -20,13 +20,27 @@
 }
 
 .product__item {
+    padding: 20px;
     max-width: 280px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 1px 1px 3px rgb(201, 199, 199);
 }
 
 .product__image {
     width: 100%;
     height: 280px;
+    /* margin-bottom: 20px; */
 }
 
+.product__title {
+    /* margin-bottom: 15px; */
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.product__price {
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+}

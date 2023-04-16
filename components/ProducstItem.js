@@ -5,6 +5,8 @@ class ProductsItem {
         let productContainer = document.createElement('div');
         productContainer.className = 'product__container'
         for(let product of localData) {
+
+
             let productBlock = document.createElement('div');
             productBlock.className = 'product__item';
 
@@ -20,6 +22,13 @@ class ProductsItem {
             productPrice.className = 'product__price';
             productPrice.innerHTML = '$' + product.price;
 
+
+
+            // productImage.addEventListener('click', () => {
+            //     var PopUpW = window.open("", "PopUp Window", "resizable=no,scrollbars=no,width=350,height=150,copyhistory=1");
+            //     PopUpW.document.write(product.description);
+            // })
+
             productBlock.append(productImage, productTitle, productPrice);
 
 
@@ -34,4 +43,4 @@ class ProductsItem {
     }
 }
 
-export const productsItem = new ProductsItem().create();
+export const productsItem = new ProductsItem();

@@ -1,11 +1,11 @@
 import { productsTitle } from "./ProductsTitle.js";
-import { productsItem } from "./ProducstItem.js";
 
 class Main  {
     create() {
         let main = document.createElement('main');
         main.className = 'main';
-        main.append(productsTitle, productsItem)
+        main.append(productsTitle);
+
         this.element = main;
         return this.element;
     }

@@ -2,6 +2,8 @@ import { utilies as Utilies } from "./Utilies.js";
 import { header as Header} from "./Header.js";
 import { main as Main } from "./Main.js";
 import { footer as Footer } from "./Footer.js";
+import { productsItem } from "./ProducstItem.js";
+
 
 export class App {
     constructor() {
@@ -9,7 +11,6 @@ export class App {
     }
 
     create() {
-        this.getData();
         const app = document.createElement('div');
         app.className = 'app';
         this.element = app;
@@ -22,7 +23,6 @@ export class App {
             let responce = await fetch('https://fakestoreapi.com/products');
             let result = await responce.json();
             window.localStorage.setItem('shopData', JSON.stringify(result));
-            console.log('123')
         }
     }
 
@@ -35,5 +35,7 @@ export class App {
         Utilies;
         this.create();
         this.render();
+
+        document.querySelector('.main').append(productsItem.init());
     }
 }
