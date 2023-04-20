@@ -11,10 +11,10 @@ class ProductsItem {
         let cartFullPrice = document.querySelector('.cartPrice');
         let fullPrice = 0;
         this.productData.forEach(product => {
-            fullPrice += product.productPrice;
+            fullPrice += product.price;
         });
         
-        cartFullPrice.innerHTML ='$' + fullPrice.toFixed(2);
+        cartFullPrice.innerHTML = '$' + fullPrice.toFixed(2);
     }
 
     create() {
@@ -27,9 +27,15 @@ class ProductsItem {
             let productBlock = document.createElement('div');
             productBlock.className = 'product__item';
 
+            let productLinkImage = document.createElement('a');
+            productLinkImage.setAttribute('href', `#/page/${product.id}`);
+
             let productImage = document.createElement('img');
             productImage.className = 'product__image';
             productImage.setAttribute('src', product.image)
+
+            productLinkImage.append(productImage);
+
 
             let productTitle = document.createElement('span');
             productTitle.className = 'product__title';
@@ -38,10 +44,12 @@ class ProductsItem {
             let productPrice = document.createElement('span');
             productPrice.className = 'product__price';
             productPrice.innerHTML = '$' + product.price;
+
             let color = Math.floor(Math.random() * colors.length);
             productPrice.style.color = colors[color]
 
             let productButton = document.createElement('button');
+            productButton.setAttribute('id', product.id);
             productButton.className = 'addButton';
             productButton.innerHTML = 'Add to basket';
 
@@ -60,13 +68,10 @@ class ProductsItem {
 
                 let date = new Date();
                 date.setDate(date.getDate() + 10)
-                
-                let productObj = {
-                    productImage: product.image,
-                    productTitle: product.title,
-                    productPrice: product.price,
-                    productDescription: product.description
-                }
+            
+                let productArr = JSON.parse(localStorage.getItem('shopData')).filter(elem => elem.id == event.target.id);
+
+                let productObj = productArr[0];
 
                 this.productData.push(productObj);
                 document.cookie = `data=${JSON.stringify(this.productData)}; path='/'; expires=${date}`;
@@ -81,7 +86,7 @@ class ProductsItem {
                 }
             })
 
-            productBlock.append(productImage, productTitle, productPrice, productButton);
+            productBlock.append(productLinkImage, productTitle, productPrice, productButton);
 
 
             productContainer.append(productBlock);

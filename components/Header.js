@@ -1,4 +1,4 @@
-import { headerElements as HeaderElements} from "./HeaderElements.js";
+import { headerElements as HeaderElements} from "../elements/HeaderElements.js";
 
 class Header {
     create() {

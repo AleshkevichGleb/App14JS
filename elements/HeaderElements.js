@@ -1,4 +1,4 @@
-import { logo as Logo } from "./Logo.js";
+import { logo as Logo } from "../components/Logo.js";
 
 class HeaderElements {
 
@@ -30,7 +30,8 @@ class HeaderElements {
         nav.append(homeLink, shopLink, contactLink);
         headerBlock.append(Logo.init(), nav);
 
-        let cartBlock = document.createElement('div');
+        let cartBlock = document.createElement('a');
+        cartBlock.setAttribute('href', '#/cart');
         cartBlock.className = 'header__cart';
 
         let cartImage = document.createElement('img');

@@ -1,4 +1,4 @@
-import { productsTitle } from "./ProductsTitle.js";
+import { productsTitle } from "../elements/ProductsTitle.js";
 
 class Main  {
     create() {

@@ -2,7 +2,8 @@ import { utilies as Utilies } from "./Utilies.js";
 import { header as Header} from "./Header.js";
 import { main as Main } from "./Main.js";
 import { footer as Footer } from "./Footer.js";
-import { productsItem } from "./ProducstItem.js";
+import { productsItem } from "../elements/ProducstItem.js";
+import { getData } from "../request/getData.js";
 
 
 export class App {
@@ -17,21 +18,13 @@ export class App {
         this.element.append(Header, Main, Footer)
     }
 
-    async getData() {
-        if(localStorage.getItem('shopData') && localStorage.getItem('shopData') > 0) return;
-        else {
-            let responce = await fetch('https://fakestoreapi.com/products');
-            let result = await responce.json();
-            window.localStorage.setItem('shopData', JSON.stringify(result));
-        }
-    }
 
     render() {
         document.body.prepend(this.element);
     }
 
     async init() {
-        await this.getData();
+        await getData();
         Utilies;
         this.create();
         this.render();

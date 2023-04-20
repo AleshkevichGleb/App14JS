@@ -1,4 +1,4 @@
-import { footerElements as FooterElements } from "./FooterElements.js";
+import { footerElements as FooterElements } from "../elements/FooterElements.js";
 
 class Footer  {
     create() {

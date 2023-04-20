@@ -1,4 +1,4 @@
-import { logo as Logo } from "./Logo.js";
+import { logo as Logo } from "../components/Logo.js";
 
 let info = new Map([
     ["../images/location.png", "59 Street, NY, Rose Town"],
