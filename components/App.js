@@ -4,6 +4,7 @@ import { main as Main } from "./Main.js";
 import { footer as Footer } from "./Footer.js";
 import { productsItem } from "../elements/ProducstItem.js";
 import { getData } from "../request/getData.js";
+import { routerEvt } from "../route/router.js";
 
 
 export class App {
@@ -28,7 +29,7 @@ export class App {
         Utilies;
         this.create();
         this.render();
-
+        routerEvt();
         document.querySelector('.main').append(productsItem.init());
     }
 }

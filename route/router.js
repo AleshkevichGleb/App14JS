@@ -1,11 +1,11 @@
 import { Cart } from "../components/Cart.js";
 import { Products } from "../components/Products.js";
 import { ErrorComponent } from "../components/ErrorComponent.js";
-import { main as Main } from "../components/Main.js";
+import { productsItem } from "../elements/ProducstItem.js";
 
 
 const routes = () => [
-    {path:'/', component: Main},
+    {path:'/', component: () => productsItem.init()},
     {path:'/page', component: Products},
     {path: '/cart', component: Cart}
 ]
@@ -19,13 +19,17 @@ export const router = () => {
     const products = JSON.parse(localStorage.getItem('shopData'));
     const product = products.filter(prod => prod.id == id)[0];
 
+    const cartProducts = productsItem.getCookie('data');
+
     const findComponent = (path, routes) => routes.find(rout => rout.path === path) || undefined;
 
     const {component = ErrorComponent} = findComponent(path, routes()) || {};
 
     document.querySelector('.main').innerHTML = '';
-    document.querySelector('.main').append(component(product));
+    document.querySelector('.main').append(component(product || cartProducts));
 }
 
-// window.addEventListener('load', router);
-window.addEventListener('hashchange', router);
+export const routerEvt = () => {
+    window.addEventListener('load', router);
+    window.addEventListener('hashchange', router);
+}

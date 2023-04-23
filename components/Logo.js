@@ -1,7 +1,7 @@
 class Logo {
     create() {
         let logo = document.createElement("a");
-        logo.setAttribute('href', '/');
+        logo.setAttribute('href', '#');
         let logoImage = document.createElement('img');
         logoImage.setAttribute('src', '../images/logo.png');
         logoImage.className = 'logo';

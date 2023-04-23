@@ -14,7 +14,7 @@ class ProductsItem {
             fullPrice += product.price;
         });
         
-        cartFullPrice.innerHTML = '$' + fullPrice.toFixed(2);
+        cartFullPrice.innerHTML  = '$' + fullPrice.toFixed(2);
     }
 
     create() {
