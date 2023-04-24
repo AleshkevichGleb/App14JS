@@ -26,7 +26,7 @@ export const router = () => {
     const {component = ErrorComponent} = findComponent(path, routes()) || {};
 
     document.querySelector('.main').innerHTML = '';
-    document.querySelector('.main').append(component(product || cartProducts));
+    document.querySelector('.main').append(component(product));
 }
 
 export const routerEvt = () => {

@@ -1,13 +1,15 @@
+import { productsItem } from "../elements/ProducstItem.js";
+
 const plusCountProduct = (cart, quanity) => event => {
     const {target} = event;
     const id = target.closest('.cart__item').querySelector('.cart__remove').getAttribute('id');
     
     let date = new Date();
     date.setDate(date.getDate() + 10);
-
+    console.log(id);
     const product = JSON.parse(localStorage.getItem('shopData')).filter(prod => prod.id === +id)[0];
-
-    cart.push(product);
+    console.log('product:', product);
+    cart = [...cart, product];
 
     document.cookie = `data=${JSON.stringify(cart)}; path='/'; expires=${date}`;
 
@@ -15,6 +17,7 @@ const plusCountProduct = (cart, quanity) => event => {
     countProducts.innerHTML = cart.length;
    
     let cartFullPrice = document.querySelector('.cartPrice');
+    console.log(cart);
 
     let fullPrice = 0;
     cart.forEach(product => {
@@ -50,14 +53,15 @@ const minusCountProduct = (cart, quanity) => event => {
         cart.forEach(product => {
                 fullPrice += +product.price;
         });
-    
+        console.log(cart);
         cartFullPrice.innerHTML  = '$' + fullPrice.toFixed(2);
         // quanity.value = cart.filter(prod => prod.id === +id).length;
         quanity.value--;
     }
 }
 
-export const Cart = (productsCookie) => {
+export const Cart = () => {
+    let productsCookie = productsItem.getCookie('data');
     const container = document.createElement('div');
     container.className = 'cart__container';
 
@@ -91,7 +95,7 @@ export const Cart = (productsCookie) => {
     let buttonsRemove = [];
     if(cart){
         let items = [];
-        Start:
+
         for(let element of cart){
             const item = document.createElement('div');
             item.className = 'cart__item';
@@ -139,23 +143,14 @@ export const Cart = (productsCookie) => {
             item.append(productDelete, cartImage, cartTitle, cartPrice, cartQuanity);
 
             items = [...items, item];
-            for(let i = 0; i < items.length; i++) {
-                for(let j = i + 1; j < items.length; j++) {
-                    if(items[i].querySelector('.cart__remove').id === items[j].querySelector('.cart__remove').id) {
-                        // continue Start;
-                        console.log(items[i], items[j]);
-                    }
-                }
-            }
             
             productsContainer.append(item);
-    
+
             productDelete.addEventListener('click', (event) => {
                 const {target} = event;
-    
                 const parent = target.closest('.cart__item');
                 cart = cart.filter(product => product.id !== +target.id );
-                    
+                console.log(cart);
                 let date = new Date();
                 date.setDate(date.getDate() + 10);
     
@@ -168,6 +163,7 @@ export const Cart = (productsCookie) => {
     
                 countProducts.innerHTML = cart.length;
                 cartPrice.innerHTML = '$'+fullprice;
+ 
                 parent.remove();
 
                 if(cart.length === 0) {
@@ -183,6 +179,15 @@ export const Cart = (productsCookie) => {
     
             
         }; 
+
+        for(let i = 0; i < items.length; i++) {
+            for(let j = i + 1; j < items.length; j++) {
+                if(items[i].querySelector('.cart__remove').id === items[j].querySelector('.cart__remove').id) {
+                    items[j].remove();
+                    continue;
+                }
+            }
+        }
     }
     
 
