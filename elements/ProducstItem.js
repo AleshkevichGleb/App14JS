@@ -1,11 +1,10 @@
+import { setCartTotalQuanity } from "../functions/setCartTotalQuanity.js";
+import { getCookie } from "../storage/getCookie.js";
+import { setCookie } from "../storage/setCookie.js";
+
 let colors = ["red", "black"];
 
 class ProductsItem {
-
-    getCookie(name) {
-            let results = document.cookie.match ( '(^|;) ?' + name + '=([^;]*)(;|$)' );
-            return results ? unescape(results[2]) : null;
-    }
 
     calcFullPrice() {
         let cartFullPrice = document.querySelector('.cartPrice');
@@ -55,7 +54,7 @@ class ProductsItem {
 
             let countProducts = document.querySelector('.cartCount');
 
-            this.productData = JSON.parse(this.getCookie('data'))
+            this.productData = JSON.parse(getCookie('cartItems'))
             if(!this.productData) this.productData = [];
             else {
                 countProducts.classList.add('active')
@@ -65,18 +64,29 @@ class ProductsItem {
 
             productButton.addEventListener('click', (event) => {
                 const {target} = event; 
-
-                let date = new Date();
-                date.setDate(date.getDate() + 10)
             
                 let productArr = JSON.parse(localStorage.getItem('shopData')).filter(elem => elem.id == event.target.id);
 
                 let productObj = productArr[0];
 
-                this.productData.push(productObj);
-                document.cookie = `data=${JSON.stringify(this.productData)}; path='/'; expires=${date}`;
+                if(this.productData.length) {
+                    this.productData.forEach(elem => {
+                        if(elem.id === productObj.id) {
+                            elem.quanity++;
+                        } else {
+                            productObj.quanity = 1;
+                            this.productData.push(productObj);
+                        }
+                        console.log(typeof elem.id);
+                    })
+                } else {
+                    productObj.quanity = 1;
+                    this.productData.push(productObj);
+                }
 
-                countProducts.innerHTML = this.productData.length;
+                setCookie('cartItems', this.productData);
+
+                countProducts.innerHTML = setCartTotalQuanity();
                 
                 this.calcFullPrice();
 

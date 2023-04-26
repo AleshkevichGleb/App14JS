@@ -2,6 +2,7 @@ import { Cart } from "../components/Cart.js";
 import { Products } from "../components/Products.js";
 import { ErrorComponent } from "../components/ErrorComponent.js";
 import { productsItem } from "../elements/ProducstItem.js";
+import { getCookie } from "../storage/getCookie.js";
 
 
 const routes = () => [
@@ -19,7 +20,7 @@ export const router = () => {
     const products = JSON.parse(localStorage.getItem('shopData'));
     const product = products.filter(prod => prod.id == id)[0];
 
-    const cartProducts = productsItem.getCookie('data');
+    const cartProducts = getCookie('cartItems');
 
     const findComponent = (path, routes) => routes.find(rout => rout.path === path) || undefined;
 

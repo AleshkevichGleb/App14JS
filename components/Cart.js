@@ -1,17 +1,17 @@
 import { productsItem } from "../elements/ProducstItem.js";
+import { deleteFullCookie } from "../storage/deleteCookie.js";
+import { getCookie } from "../storage/getCookie.js";
+import { setCookie } from "../storage/setCookie.js";
 
 const plusCountProduct = (cart, quanity) => event => {
     const {target} = event;
     const id = target.closest('.cart__item').querySelector('.cart__remove').getAttribute('id');
     
-    let date = new Date();
-    date.setDate(date.getDate() + 10);
-    console.log(id);
     const product = JSON.parse(localStorage.getItem('shopData')).filter(prod => prod.id === +id)[0];
     console.log('product:', product);
     cart = [...cart, product];
 
-    document.cookie = `data=${JSON.stringify(cart)}; path='/'; expires=${date}`;
+    setCookie('cartItems', cart);
 
     let countProducts = document.querySelector('.cartCount');
     countProducts.innerHTML = cart.length;
@@ -35,15 +35,11 @@ const minusCountProduct = (cart, quanity) => event => {
         const {target} = event;
         const id = target.closest('.cart__item').querySelector('.cart__remove').getAttribute('id');
     
-        let date = new Date();
-        date.setDate(date.getDate() + 10);
-    
         const product = JSON.parse(localStorage.getItem('shopData')).filter(prod => prod.id === +id)[0];
     
         cart.pop(product);
     
-        document.cookie = `data=${JSON.stringify(cart)}; path='/'; expires=${date}`;
-    
+        setCookie('cartItems', cart)
         let countProducts = document.querySelector('.cartCount');
         countProducts.innerHTML = cart.length;
        
@@ -61,7 +57,7 @@ const minusCountProduct = (cart, quanity) => event => {
 }
 
 export const Cart = () => {
-    let productsCookie = productsItem.getCookie('data');
+    let productsCookie = getCookie('cartItems');
     const container = document.createElement('div');
     container.className = 'cart__container';
 
@@ -151,15 +147,13 @@ export const Cart = () => {
                 const parent = target.closest('.cart__item');
                 cart = cart.filter(product => product.id !== +target.id );
                 console.log(cart);
-                let date = new Date();
-                date.setDate(date.getDate() + 10);
     
                 let countProducts = document.querySelector('.cartCount');
                 let cartPrice = document.querySelector('.cartPrice');
     
                 let fullprice = 0;
                 cart.forEach(elem => fullprice += elem.price)
-                document.cookie = `data=${JSON.stringify(cart)}; path='/'; expires=${date}`;
+                setCookie('cartItems', cart);
     
                 countProducts.innerHTML = cart.length;
                 cartPrice.innerHTML = '$'+fullprice;
@@ -167,8 +161,7 @@ export const Cart = () => {
                 parent.remove();
 
                 if(cart.length === 0) {
-                    date.setDate(date.getDate() - 30);
-                    document.cookie = `data=${JSON.stringify(cart)}; path='/'; expires=${date}`;
+                    deleteFullCookie('cartItems')
                     countProducts.classList.remove('active')
                     countProducts.innerHTML = '';
                     cartPrice.innerHTML = '';
