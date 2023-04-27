@@ -1,3 +1,4 @@
+import { setCartTotalPrice } from "../functions/setCartTotalPrice.js";
 import { setCartTotalQuanity } from "../functions/setCartTotalQuanity.js";
 import { getCookie } from "../storage/getCookie.js";
 import { setCookie } from "../storage/setCookie.js";
@@ -58,8 +59,8 @@ class ProductsItem {
             if(!this.productData) this.productData = [];
             else {
                 countProducts.classList.add('active')
-                countProducts.innerHTML = this.productData.length;
-                this.calcFullPrice();
+                setCartTotalQuanity();
+                setCartTotalPrice();
             }
 
             productButton.addEventListener('click', (event) => {
@@ -68,31 +69,37 @@ class ProductsItem {
                 let productArr = JSON.parse(localStorage.getItem('shopData')).filter(elem => elem.id == event.target.id);
 
                 let productObj = productArr[0];
+                
+                let flag = false;
 
                 if(this.productData.length) {
-                    this.productData.forEach(elem => {
+                    this.productData.filter(elem => {
                         if(elem.id === productObj.id) {
                             elem.quanity++;
-                        } else {
-                            productObj.quanity = 1;
-                            this.productData.push(productObj);
-                        }
-                        console.log(typeof elem.id);
+                            flag = true;
+                        } 
                     })
+
+                    if(!flag) {
+                        productObj.quanity = 1;
+                        this.productData.push(productObj);
+                    }
+
                 } else {
                     productObj.quanity = 1;
                     this.productData.push(productObj);
                 }
 
+
                 setCookie('cartItems', this.productData);
 
-                countProducts.innerHTML = setCartTotalQuanity();
+                setCartTotalQuanity();
                 
-                this.calcFullPrice();
+                setCartTotalPrice();
 
                 if(!countProducts.classList.contains('add')) {
                     countProducts.classList.add('active')
-                    countProducts.innerHTML = this.productData.length;
+                    setCartTotalQuanity();
                 }
             })
 

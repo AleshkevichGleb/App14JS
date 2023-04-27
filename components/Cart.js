@@ -1,4 +1,6 @@
 import { productsItem } from "../elements/ProducstItem.js";
+import { setCartTotalPrice } from "../functions/setCartTotalPrice.js";
+import { setCartTotalQuanity } from "../functions/setCartTotalQuanity.js";
 import { deleteFullCookie } from "../storage/deleteCookie.js";
 import { getCookie } from "../storage/getCookie.js";
 import { setCookie } from "../storage/setCookie.js";
@@ -7,25 +9,15 @@ const plusCountProduct = (cart, quanity) => event => {
     const {target} = event;
     const id = target.closest('.cart__item').querySelector('.cart__remove').getAttribute('id');
     
-    const product = JSON.parse(localStorage.getItem('shopData')).filter(prod => prod.id === +id)[0];
-    console.log('product:', product);
-    cart = [...cart, product];
+    cart.filter(elem => {
+        if(elem.id === +id) elem.quanity++;
+    }) 
 
     setCookie('cartItems', cart);
 
-    let countProducts = document.querySelector('.cartCount');
-    countProducts.innerHTML = cart.length;
-   
-    let cartFullPrice = document.querySelector('.cartPrice');
-    console.log(cart);
+    setCartTotalPrice();
+    setCartTotalQuanity();
 
-    let fullPrice = 0;
-    cart.forEach(product => {
-            fullPrice += +product.price;
-    });
-
-    cartFullPrice.innerHTML  = '$' + fullPrice.toFixed(2);
-    // quanity.value = cart.filter(prod => prod.id === +id).length;
     quanity.value++;
 }
 
@@ -35,29 +27,20 @@ const minusCountProduct = (cart, quanity) => event => {
         const {target} = event;
         const id = target.closest('.cart__item').querySelector('.cart__remove').getAttribute('id');
     
-        const product = JSON.parse(localStorage.getItem('shopData')).filter(prod => prod.id === +id)[0];
+        cart.filter(elem => {
+            if(elem.id === +id) elem.quanity--;
+        }) 
     
-        cart.pop(product);
+        setCookie('cartItems', cart);
     
-        setCookie('cartItems', cart)
-        let countProducts = document.querySelector('.cartCount');
-        countProducts.innerHTML = cart.length;
-       
-        let cartFullPrice = document.querySelector('.cartPrice');
+        setCartTotalPrice();
+        setCartTotalQuanity();
     
-        let fullPrice = 0;
-        cart.forEach(product => {
-                fullPrice += +product.price;
-        });
-        console.log(cart);
-        cartFullPrice.innerHTML  = '$' + fullPrice.toFixed(2);
-        // quanity.value = cart.filter(prod => prod.id === +id).length;
         quanity.value--;
     }
 }
 
 export const Cart = () => {
-    let productsCookie = getCookie('cartItems');
     const container = document.createElement('div');
     container.className = 'cart__container';
 
@@ -84,13 +67,12 @@ export const Cart = () => {
 
     titles.append(titlesName, titlesPrice, titlesQuanity);
     
-    let cart = JSON.parse(productsCookie);
+    let cart = JSON.parse(getCookie('cartItems'));
+    
     const productsContainer = document.createElement('div');
     productsContainer.className = 'cart__products';
 
-    let buttonsRemove = [];
     if(cart){
-        let items = [];
 
         for(let element of cart){
             const item = document.createElement('div');
@@ -100,7 +82,6 @@ export const Cart = () => {
             productDelete.innerHTML = '&#10008;';
             productDelete.className = 'cart__remove';
             productDelete.setAttribute('id', element.id);
-            buttonsRemove.push(productDelete);
     
             const cartImage = document.createElement('img');
             cartImage.setAttribute('src', element.image);
@@ -119,8 +100,7 @@ export const Cart = () => {
             
             const quanity = document.createElement('input');
             quanity.setAttribute('type', 'number');
-    
-            quanity.value = getCountOfOneProduct(cart, element.id);
+            quanity.value = element.quanity;
             quanity.disabled = true;
             quanity.className = 'cart__quanityInput';
     
@@ -137,8 +117,6 @@ export const Cart = () => {
             cartQuanity.append(quanity, increaseQuanity, decreaseQuanity);
     
             item.append(productDelete, cartImage, cartTitle, cartPrice, cartQuanity);
-
-            items = [...items, item];
             
             productsContainer.append(item);
 
@@ -146,7 +124,6 @@ export const Cart = () => {
                 const {target} = event;
                 const parent = target.closest('.cart__item');
                 cart = cart.filter(product => product.id !== +target.id );
-                console.log(cart);
     
                 let countProducts = document.querySelector('.cartCount');
                 let cartPrice = document.querySelector('.cartPrice');
@@ -155,8 +132,8 @@ export const Cart = () => {
                 cart.forEach(elem => fullprice += elem.price)
                 setCookie('cartItems', cart);
     
-                countProducts.innerHTML = cart.length;
-                cartPrice.innerHTML = '$'+fullprice;
+                setCartTotalQuanity();
+                setCartTotalPrice();
  
                 parent.remove();
 
@@ -172,15 +149,6 @@ export const Cart = () => {
     
             
         }; 
-
-        for(let i = 0; i < items.length; i++) {
-            for(let j = i + 1; j < items.length; j++) {
-                if(items[i].querySelector('.cart__remove').id === items[j].querySelector('.cart__remove').id) {
-                    items[j].remove();
-                    continue;
-                }
-            }
-        }
     }
     
 
@@ -208,16 +176,4 @@ function chechCartEmpty(cart, container, title, table) {
     else {
         container.append(title, table);
     }
-}
-
-function getCountOfOneProduct(cart, id) {
-    let count = 0;
-
-    cart.forEach( product => {
-        if(product.id == id){
-            count++
-        } 
-    })
-
-    return count;
 }
