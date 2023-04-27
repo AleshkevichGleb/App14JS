@@ -7,16 +7,6 @@ let colors = ["red", "black"];
 
 class ProductsItem {
 
-    calcFullPrice() {
-        let cartFullPrice = document.querySelector('.cartPrice');
-        let fullPrice = 0;
-        this.productData.forEach(product => {
-            fullPrice += product.price;
-        });
-        
-        cartFullPrice.innerHTML  = '$' + fullPrice.toFixed(2);
-    }
-
     create() {
         let localData = JSON.parse(localStorage.getItem('shopData'));
         
